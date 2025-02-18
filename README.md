@@ -73,8 +73,8 @@ aptos move run --function-id 'default::dual_faucet_init::initialize' --assume-ye
 ## Test Aptos Move contracts
 
 Assuming that:
-- Test coin YOLO (Fungible Asset) metadata: `0x9faa96e24f9c278669f1806aeb4856fb04d3186ed3bc494d2041d3cecaea05b`
-- Test coin MoonCoin type: `0x76ffc077ebde06ee2d20d819429f52a211934d97fc9fb0a98b07d241453ad139::moon_coin::MoonCoin`
+- Test FLEX (Fungible Asset) metadata: `0x82ca696c48f3985f8d6b1a2213333c6487d6261ffe0df1f3a1c72062b7503450`
+- Test coin MoonCoin type: `0x76ffc077ebde06ee2d20d819429f52a211934d97fc9fb0a98b07d241453ad139::fake_usd::FakeUSD`
 
 Run the following command to create the dual faucet:
 
@@ -82,24 +82,24 @@ Run the following command to create the dual faucet:
 aptos move run --function-id 'default::fungible_asset_coin_dual_faucet_service::create' \
   --type-args \
     '0x1::fungible_asset::Metadata' \
-    '0x76ffc077ebde06ee2d20d819429f52a211934d97fc9fb0a98b07d241453ad139::moon_coin::MoonCoin' \
+    '0x76ffc077ebde06ee2d20d819429f52a211934d97fc9fb0a98b07d241453ad139::fake_usd::FakeUSD' \
   --args \
-    'address:0x9faa96e24f9c278669f1806aeb4856fb04d3186ed3bc494d2041d3cecaea05b' \
-    'u64:100000000000' \
-    'u64:100000000000' \
+    'address:0x82ca696c48f3985f8d6b1a2213333c6487d6261ffe0df1f3a1c72062b7503450' \
+    'u64:900000000000000000' \
+    'u64:10000000000000' \
   --assume-yes
 ```
 
-Assuming that the created dual faucet object address is `0x96521f6a04f6cf6187101d537970e8304dc1abc8781062a9e45e94cf3740de09`,
+Assuming that the created dual faucet object address is `0xf941eee75b40dbb850411009cab34cec0704fd7110f3f1974b7bf8d8fcbb7c84`,
 
 Run the following command to request coins from the dual faucet:
 
 ```shell
 aptos move run --function-id 'default::fungible_asset_coin_dual_faucet_service::drop' \
   --type-args \
-    '0x76ffc077ebde06ee2d20d819429f52a211934d97fc9fb0a98b07d241453ad139::moon_coin::MoonCoin' \
+    '0x76ffc077ebde06ee2d20d819429f52a211934d97fc9fb0a98b07d241453ad139::fake_usd::FakeUSD' \
   --args \
-    'address:0x96521f6a04f6cf6187101d537970e8304dc1abc8781062a9e45e94cf3740de09' \
+    'address:0xf941eee75b40dbb850411009cab34cec0704fd7110f3f1974b7bf8d8fcbb7c84' \
   --assume-yes
 ```
 
@@ -109,13 +109,28 @@ Run the following command to replenish the dual faucet:
 aptos move run --function-id 'default::fungible_asset_coin_dual_faucet_service::replenish' \
   --type-args \
     '0x1::fungible_asset::Metadata' \
-    '0x76ffc077ebde06ee2d20d819429f52a211934d97fc9fb0a98b07d241453ad139::moon_coin::MoonCoin' \
+    '0x76ffc077ebde06ee2d20d819429f52a211934d97fc9fb0a98b07d241453ad139::fake_usd::FakeUSD' \
   --args \
-    'address:0x96521f6a04f6cf6187101d537970e8304dc1abc8781062a9e45e94cf3740de09' \
-    'address:0x9faa96e24f9c278669f1806aeb4856fb04d3186ed3bc494d2041d3cecaea05b' \
-    'u64:100000000000' \
+    'address:0xf941eee75b40dbb850411009cab34cec0704fd7110f3f1974b7bf8d8fcbb7c84' \
+    'address:0x82ca696c48f3985f8d6b1a2213333c6487d6261ffe0df1f3a1c72062b7503450' \
+    'u64:1000000000000000' \
     'u64:100000000000' \
   --assume-yes
 ```
 
 
+## Tips
+
+### Mint meme coin
+
+```shell
+aptos move run --function-id '0x76ffc077ebde06ee2d20d819429f52a211934d97fc9fb0a98b07d241453ad139::launchpad_service::mint_and_drop_burn_ref' \
+  --type-args \
+    '0x1::fungible_asset::Metadata' \
+  --args \
+    'string:FLEXT' \
+    'string:Test FLEX Coin' \
+    'string:' \
+    'string:' \
+  --assume-yes
+```
