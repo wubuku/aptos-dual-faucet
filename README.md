@@ -71,8 +71,22 @@ wubuku/dddappp-aptos:master \
 > ```
 
 
+### Implementing Business Logic
 
-Compile Move contracts:
+The tool has generated some files with the suffix `_logic.move` in the directory `aptos-contracts/sources`. 
+
+Generally, these files contain the scaffolding code of functions that implement business logic, namely the signature part of the functions. You just need to fill in the implementation part of the functions.
+
+> **HINT**
+>
+> If CRUD is all the business logic you need, You **don't** need to write a single line of code other than the DDDML model.
+> The `MOVE_CRUD_IT` preprocessor can generate the full CRUD methods for you.
+> See more details in this [link](https://github.com/wubuku/Dapp-LCDP-Demo).
+
+
+### Compile Aptos Move contracts
+
+Compile contracts:
 
 ```shell
 # cd aptos-contracts
@@ -82,6 +96,7 @@ aptos move compile --skip-fetch-latest-git-deps --named-addresses dual_faucet=de
 
 ## Publish Aptos Move contracts
 
+Publish contracts:
 
 ```shell
 aptos move publish --skip-fetch-latest-git-deps --named-addresses dual_faucet=default --assume-yes
@@ -110,9 +125,7 @@ aptos move run --function-id 'default::fungible_asset_coin_dual_faucet_service::
   --assume-yes
 ```
 
-Assuming that the created dual faucet object address is `0xf941eee75b40dbb850411009cab34cec0704fd7110f3f1974b7bf8d8fcbb7c84`,
-
-Run the following command to request coins from the dual faucet:
+Assuming that the created dual faucet object address is `0xf941eee75b40dbb850411009cab34cec0704fd7110f3f1974b7bf8d8fcbb7c84` (can be found in the transaction details by Aptos Explorer), run the following command to request coins from the dual faucet:
 
 ```shell
 aptos move run --function-id 'default::fungible_asset_coin_dual_faucet_service::drop' \
@@ -142,6 +155,8 @@ aptos move run --function-id 'default::fungible_asset_coin_dual_faucet_service::
 ## Tips
 
 ### Mint meme coin
+
+Run the following command to mint a meme coin for your testing:
 
 ```shell
 aptos move run --function-id '0x76ffc077ebde06ee2d20d819429f52a211934d97fc9fb0a98b07d241453ad139::launchpad_service::mint_and_drop_burn_ref' \
