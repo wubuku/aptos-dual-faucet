@@ -1,0 +1,25 @@
+aggregates:
+  FungibleAssetCoinDualFaucet:
+    metadata:
+      NO_PUBLIC_HOT_POTATO: true
+      DataAccessFriends:
+       - "dual_faucet::fungible_asset_coin_dual_faucet_accessor"
+      TypeParameterOffChainPropertyNameFormats:
+        #X: "{0}_TokenType"
+        Y: "{0}_TokenType"
+    id:
+      name: Id
+      type: AptosObjectID
+    typeParameters:
+      #X:
+      #  isPhantom: true
+      Y:
+        isPhantom: true
+    properties:
+      X_Reserve:
+        #type: "Coin<X>"
+        type: Object<FungibleStore>
+      Y_Reserve:
+        type: "Coin<Y>"
+
+#    methods:
