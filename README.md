@@ -1,7 +1,27 @@
-# README
+# Dual Token Faucet
 
+A smart contract implementation of a dual token faucet on the Aptos blockchain, allowing users to receive two different types of tokens simultaneously.
 
-# Flex Swap - Aptos Move
+## Overview
+
+This project implements a dual token faucet that can distribute two different types of tokens:
+- One FungibleAsset token (X token)
+- One Coin type token (Y token)
+
+The faucet maintains reserves of both tokens and implements rate limiting to prevent abuse.
+
+### Core Functions
+
+1. **Create** - Initializes a new dual token faucet with initial reserves
+2. **Drop** - Distributes fixed amounts of both tokens with rate limiting
+3. **Replenish** - Adds tokens to the faucet reserves
+
+### Technical Details
+
+- Built on Aptos Move
+- Uses FungibleAsset and Coin frameworks
+- Implements event tracking and distribution records
+- Supports generic token types
 
 
 ## Programming
