@@ -1,10 +1,9 @@
 module dual_faucet::fungible_asset_coin_dual_faucet_create_logic {
     use std::signer;
-
-    use aptos_std::type_info;
-    use aptos_framework::object;
     use aptos_framework::coin::{Self, Coin};
     use aptos_framework::fungible_asset::{Self, FungibleAsset};
+    use aptos_framework::object;
+    use aptos_std::type_info;
 
     use dual_faucet::fa_coin_dual_faucet_created;
     use dual_faucet::fungible_asset_coin_dual_faucet;
@@ -60,7 +59,6 @@ module dual_faucet::fungible_asset_coin_dual_faucet_create_logic {
         object::disable_ungated_transfer(&x_store_transfer_ref);
         let x_token_metadata = fungible_asset::metadata_from_asset(&x_amount);
         let x_store = fungible_asset::create_store(&x_store_constructor_ref, x_token_metadata);
-
 
         // Create the dual faucet
         let dual_faucet = fungible_asset_coin_dual_faucet::new_fungible_asset_coin_dual_faucet<Y>(

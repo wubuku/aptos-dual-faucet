@@ -10,6 +10,7 @@ module dual_faucet::fungible_asset_coin_dual_faucet_aggregate {
     use dual_faucet::fungible_asset_coin_dual_faucet::{Self, FungibleAssetCoinDualFaucet};
     use dual_faucet::fungible_asset_coin_dual_faucet_create_logic;
     use dual_faucet::fungible_asset_coin_dual_faucet_drop_logic;
+    use dual_faucet::fungible_asset_coin_dual_faucet_replenish_logic;
     use std::signer;
 
     public fun create<Y>(
@@ -70,6 +71,33 @@ module dual_faucet::fungible_asset_coin_dual_faucet_aggregate {
         fungible_asset_coin_dual_faucet::update_version_and_add(id, updated_fungible_asset_coin_dual_faucet);
         fungible_asset_coin_dual_faucet::emit_fa_coin_dual_faucet_dropped(fa_coin_dual_faucet_dropped);
         (drop_return_1, drop_return_2)
+    }
+
+    public fun replenish<Y>(
+        account: &signer,
+        fungible_asset_coin_dual_faucet_obj: Object<FungibleAssetCoinDualFaucet<Y>>,
+        x_amount: FungibleAsset,
+        y_amount: Coin<Y>,
+    ) {
+        let id = object::object_address(&fungible_asset_coin_dual_faucet_obj);
+        let fungible_asset_coin_dual_faucet = fungible_asset_coin_dual_faucet::remove_fungible_asset_coin_dual_faucet(id);
+        let fa_coin_dual_faucet_replenished = fungible_asset_coin_dual_faucet_replenish_logic::verify<Y>(
+            account,
+            &x_amount,
+            &y_amount,
+            id,
+            &fungible_asset_coin_dual_faucet,
+        );
+        let updated_fungible_asset_coin_dual_faucet = fungible_asset_coin_dual_faucet_replenish_logic::mutate<Y>(
+            account,
+            &fa_coin_dual_faucet_replenished,
+            x_amount,
+            y_amount,
+            id,
+            fungible_asset_coin_dual_faucet,
+        );
+        fungible_asset_coin_dual_faucet::update_version_and_add(id, updated_fungible_asset_coin_dual_faucet);
+        fungible_asset_coin_dual_faucet::emit_fa_coin_dual_faucet_replenished(fa_coin_dual_faucet_replenished);
     }
 
 }

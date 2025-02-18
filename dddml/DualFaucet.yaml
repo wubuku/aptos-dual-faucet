@@ -21,6 +21,23 @@ aggregates:
         type: Object<FungibleStore>
       Y_Reserve:
         type: "Coin<Y>"
+      DropRecords: # Collection of all airdrop records
+        itemType: DropRecord # Reference to the DropRecord entity
+
+    entities:
+      # Records of account airdrop history for controlling drop frequency
+      DropRecord:
+        id:
+          name: AccountAddress # Address of the airdrop recipient
+          type: address
+        globalId:
+          columnNames:
+            - fungible_asset_coin_dual_faucet_id
+            - account_address
+        properties:
+          # Last airdrop time in Unix timestamp (seconds)
+          LastDropTime:
+            type: u64
 
     methods:
       Create:
@@ -85,3 +102,29 @@ aggregates:
             Y_TokenType:
               type: String
               length: 200
+
+      # Method for replenishing both tokens to the faucet
+      Replenish:
+        typeParameters:
+          Y: {}
+        objectTypeArguments:
+          Y: Y
+        parameters:
+          X_Amount:
+            type: FungibleAsset
+          Y_Amount:
+            type: Coin<Y>
+        event:
+          name: FACoinDualFaucetReplenished
+          properties:
+            Provider:
+              type: address
+            X_TokenType:
+              type: address
+            Y_TokenType:
+              type: String
+              length: 200
+            X_Amount:
+              type: u64
+            Y_Amount:
+              type: u64

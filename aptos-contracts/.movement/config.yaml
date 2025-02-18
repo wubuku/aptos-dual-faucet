@@ -1,0 +1,9 @@
+---
+profiles:
+  default:
+    network: Custom
+    private_key: "0x22a402336c48d050ac38cc1968a83617aa2d6c0ccc981c3f142a7f95657eb3ae"
+    public_key: "0xc7b536e94741cff70366f36b73ded12c46e2cf513cb1a7ec12ef3d2cf455b3da"
+    account: 76ffc077ebde06ee2d20d819429f52a211934d97fc9fb0a98b07d241453ad139
+    rest_url: "https://aptos.testnet.bardock.movementlabs.xyz/v1"
+    faucet_url: "https://faucet.testnet.bardock.movementnetwork.xyz/"
