@@ -12,6 +12,8 @@ module dual_faucet::genesis_account {
 
     friend dual_faucet::fungible_asset_coin_dual_faucet;
     friend dual_faucet::fungible_asset_coin_dual_faucet_aggregate;
+    friend dual_faucet::fungible_asset_coin_dual_faucet_create_logic;
+    friend dual_faucet::fungible_asset_coin_dual_faucet_drop_logic;
 
     const ENotGenesisAccount: u64 = 100;
 

@@ -3,7 +3,7 @@ aggregates:
     metadata:
       NO_PUBLIC_HOT_POTATO: true
       DataAccessFriends:
-       - "dual_faucet::fungible_asset_coin_dual_faucet_accessor"
+        - "dual_faucet::fungible_asset_coin_dual_faucet_accessor"
       TypeParameterOffChainPropertyNameFormats:
         #X: "{0}_TokenType"
         Y: "{0}_TokenType"
@@ -22,4 +22,66 @@ aggregates:
       Y_Reserve:
         type: "Coin<Y>"
 
-#    methods:
+    methods:
+      Create:
+        isCreationCommand: true
+        #requiredPermission: "__Publisher__"
+        metadata:
+          IsObjectSignerRequiredForMutationFunction: true
+        typeParameters:
+          #X: {}
+          Y: {}
+        objectTypeArguments:
+          #X: X
+          Y: Y
+        parameters:
+          X_Amount:
+            #type: Coin<X>
+            type: FungibleAsset
+          Y_Amount:
+            type: Coin<Y>
+        event:
+          name: FACoinDualFaucetCreated
+          #isObjectShared: true # Share the object after created.
+          properties:
+            Provider:
+              type: address
+            X_TokenType:
+              #type: String
+              #length: 200
+              type: address
+            Y_TokenType:
+              type: String
+              length: 200
+            X_Amount:
+              type: u64
+            Y_Amount:
+              type: u64
+        result:
+          type: address
+          name: FaucetObjectAddress
+
+      Drop:
+        typeParameters:
+          #X: {}
+          Y: {}
+        objectTypeArguments:
+          #X: X
+          Y: Y
+        #parameters:
+        result:
+          type: (FungibleAsset, Coin<Y>)
+        event:
+          name: FACoinDualFaucetDropped
+          properties:
+            Receiver:
+              type: address
+            X_Amount:
+              type: u64
+            Y_Amount:
+              type: u64
+            X_TokenType:
+              type: address
+            Y_TokenType:
+              type: String
+              length: 200

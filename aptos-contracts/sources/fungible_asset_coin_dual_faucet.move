@@ -12,6 +12,9 @@ module dual_faucet::fungible_asset_coin_dual_faucet {
     use dual_faucet::genesis_account;
     use dual_faucet::pass_object;
     use std::option;
+    use std::string::String;
+    friend dual_faucet::fungible_asset_coin_dual_faucet_create_logic;
+    friend dual_faucet::fungible_asset_coin_dual_faucet_drop_logic;
     friend dual_faucet::fungible_asset_coin_dual_faucet_aggregate;
 
     friend dual_faucet::fungible_asset_coin_dual_faucet_accessor;
@@ -21,6 +24,8 @@ module dual_faucet::fungible_asset_coin_dual_faucet {
     const ENotInitialized: u64 = 110;
 
     struct Events has key {
+        fa_coin_dual_faucet_created_handle: event::EventHandle<FACoinDualFaucetCreated>,
+        fa_coin_dual_faucet_dropped_handle: event::EventHandle<FACoinDualFaucetDropped>,
     }
 
     public fun initialize(account: &signer) {
@@ -28,6 +33,8 @@ module dual_faucet::fungible_asset_coin_dual_faucet {
 
         let res_account = genesis_account::resource_account_signer();
         move_to(&res_account, Events {
+            fa_coin_dual_faucet_created_handle: account::new_event_handle<FACoinDualFaucetCreated>(&res_account),
+            fa_coin_dual_faucet_dropped_handle: account::new_event_handle<FACoinDualFaucetDropped>(&res_account),
         });
 
     }
@@ -90,6 +97,114 @@ module dual_faucet::fungible_asset_coin_dual_faucet {
             version: 0,
             x_reserve,
             y_reserve: aptos_framework::coin::zero(),
+        }
+    }
+
+    struct FACoinDualFaucetCreated has store, drop {
+        id: option::Option<address>,
+        provider: address,
+        x_token_type: address,
+        y_token_type: String,
+        x_amount: u64,
+        y_amount: u64,
+    }
+
+    public fun fa_coin_dual_faucet_created_id(fa_coin_dual_faucet_created: &FACoinDualFaucetCreated): option::Option<address> {
+        fa_coin_dual_faucet_created.id
+    }
+
+    public(friend) fun set_fa_coin_dual_faucet_created_id(fa_coin_dual_faucet_created: &mut FACoinDualFaucetCreated, id: address) {
+        fa_coin_dual_faucet_created.id = option::some(id);
+    }
+
+    public fun fa_coin_dual_faucet_created_provider(fa_coin_dual_faucet_created: &FACoinDualFaucetCreated): address {
+        fa_coin_dual_faucet_created.provider
+    }
+
+    public fun fa_coin_dual_faucet_created_x_token_type(fa_coin_dual_faucet_created: &FACoinDualFaucetCreated): address {
+        fa_coin_dual_faucet_created.x_token_type
+    }
+
+    public fun fa_coin_dual_faucet_created_y_token_type(fa_coin_dual_faucet_created: &FACoinDualFaucetCreated): String {
+        fa_coin_dual_faucet_created.y_token_type
+    }
+
+    public fun fa_coin_dual_faucet_created_x_amount(fa_coin_dual_faucet_created: &FACoinDualFaucetCreated): u64 {
+        fa_coin_dual_faucet_created.x_amount
+    }
+
+    public fun fa_coin_dual_faucet_created_y_amount(fa_coin_dual_faucet_created: &FACoinDualFaucetCreated): u64 {
+        fa_coin_dual_faucet_created.y_amount
+    }
+
+    public(friend) fun new_fa_coin_dual_faucet_created<Y>(
+        provider: address,
+        x_token_type: address,
+        y_token_type: String,
+        x_amount: u64,
+        y_amount: u64,
+    ): FACoinDualFaucetCreated {
+        FACoinDualFaucetCreated {
+            id: option::none(),
+            provider,
+            x_token_type,
+            y_token_type,
+            x_amount,
+            y_amount,
+        }
+    }
+
+    struct FACoinDualFaucetDropped has store, drop {
+        id: address,
+        version: u64,
+        receiver: address,
+        x_amount: u64,
+        y_amount: u64,
+        x_token_type: address,
+        y_token_type: String,
+    }
+
+    public fun fa_coin_dual_faucet_dropped_id(fa_coin_dual_faucet_dropped: &FACoinDualFaucetDropped): address {
+        fa_coin_dual_faucet_dropped.id
+    }
+
+    public fun fa_coin_dual_faucet_dropped_receiver(fa_coin_dual_faucet_dropped: &FACoinDualFaucetDropped): address {
+        fa_coin_dual_faucet_dropped.receiver
+    }
+
+    public fun fa_coin_dual_faucet_dropped_x_amount(fa_coin_dual_faucet_dropped: &FACoinDualFaucetDropped): u64 {
+        fa_coin_dual_faucet_dropped.x_amount
+    }
+
+    public fun fa_coin_dual_faucet_dropped_y_amount(fa_coin_dual_faucet_dropped: &FACoinDualFaucetDropped): u64 {
+        fa_coin_dual_faucet_dropped.y_amount
+    }
+
+    public fun fa_coin_dual_faucet_dropped_x_token_type(fa_coin_dual_faucet_dropped: &FACoinDualFaucetDropped): address {
+        fa_coin_dual_faucet_dropped.x_token_type
+    }
+
+    public fun fa_coin_dual_faucet_dropped_y_token_type(fa_coin_dual_faucet_dropped: &FACoinDualFaucetDropped): String {
+        fa_coin_dual_faucet_dropped.y_token_type
+    }
+
+    public(friend) fun new_fa_coin_dual_faucet_dropped<Y>(
+        id: address,
+        fungible_asset_coin_dual_faucet: &FungibleAssetCoinDualFaucet<Y>,
+        receiver: address,
+        x_amount: u64,
+        y_amount: u64,
+        x_token_type: address,
+        y_token_type: String,
+    ): FACoinDualFaucetDropped {
+        FACoinDualFaucetDropped {
+            id,
+            version: version(fungible_asset_coin_dual_faucet),
+            receiver,
+            x_amount,
+            y_amount,
+            x_token_type,
+            y_token_type,
         }
     }
 
@@ -159,6 +274,18 @@ module dual_faucet::fungible_asset_coin_dual_faucet {
             y_reserve,
         } = fungible_asset_coin_dual_faucet;
         aptos_framework::coin::destroy_zero(y_reserve);
+    }
+
+    public(friend) fun emit_fa_coin_dual_faucet_created(fa_coin_dual_faucet_created: FACoinDualFaucetCreated) acquires Events {
+        assert!(exists<Events>(genesis_account::resource_account_address()), ENotInitialized);
+        let events = borrow_global_mut<Events>(genesis_account::resource_account_address());
+        event::emit_event(&mut events.fa_coin_dual_faucet_created_handle, fa_coin_dual_faucet_created);
+    }
+
+    public(friend) fun emit_fa_coin_dual_faucet_dropped(fa_coin_dual_faucet_dropped: FACoinDualFaucetDropped) acquires Events {
+        assert!(exists<Events>(genesis_account::resource_account_address()), ENotInitialized);
+        let events = borrow_global_mut<Events>(genesis_account::resource_account_address());
+        event::emit_event(&mut events.fa_coin_dual_faucet_dropped_handle, fa_coin_dual_faucet_dropped);
     }
 
 }
