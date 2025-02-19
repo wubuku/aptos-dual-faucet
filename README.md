@@ -89,8 +89,10 @@ Generally, these files contain the scaffolding code of functions that implement 
 Compile contracts:
 
 ```shell
+APTOS_CLI=aptos
+# Or APTOS_CLI=movement # Or other aptos compatible cli
 # cd aptos-contracts
-aptos move compile --skip-fetch-latest-git-deps --named-addresses dual_faucet=default
+$APTOS_CLI move compile --skip-fetch-latest-git-deps --named-addresses dual_faucet=default
 ```
 
 
@@ -99,10 +101,10 @@ aptos move compile --skip-fetch-latest-git-deps --named-addresses dual_faucet=de
 Publish contracts:
 
 ```shell
-aptos move publish --skip-fetch-latest-git-deps --named-addresses dual_faucet=default --assume-yes
+$APTOS_CLI move publish --skip-fetch-latest-git-deps --named-addresses dual_faucet=default --assume-yes
 
 # Initialize Fee Config Contract
-aptos move run --function-id 'default::dual_faucet_init::initialize' --assume-yes
+$APTOS_CLI move run --function-id 'default::dual_faucet_init::initialize' --assume-yes
 ```
 
 ## Test Aptos Move contracts
@@ -114,7 +116,7 @@ Assuming that:
 Run the following command to create the dual faucet:
 
 ```shell
-aptos move run --function-id 'default::fungible_asset_coin_dual_faucet_service::create' \
+$APTOS_CLI move run --function-id 'default::fungible_asset_coin_dual_faucet_service::create' \
   --type-args \
     '0x1::fungible_asset::Metadata' \
     '0x76ffc077ebde06ee2d20d819429f52a211934d97fc9fb0a98b07d241453ad139::fake_usd::FakeUSD' \
@@ -128,7 +130,7 @@ aptos move run --function-id 'default::fungible_asset_coin_dual_faucet_service::
 Assuming that the created dual faucet object address is `0xf941eee75b40dbb850411009cab34cec0704fd7110f3f1974b7bf8d8fcbb7c84` (can be found in the transaction details by Aptos Explorer), run the following command to request coins from the dual faucet:
 
 ```shell
-aptos move run --function-id 'default::fungible_asset_coin_dual_faucet_service::drop' \
+$APTOS_CLI move run --function-id 'default::fungible_asset_coin_dual_faucet_service::drop' \
   --type-args \
     '0x76ffc077ebde06ee2d20d819429f52a211934d97fc9fb0a98b07d241453ad139::fake_usd::FakeUSD' \
   --args \
@@ -139,7 +141,7 @@ aptos move run --function-id 'default::fungible_asset_coin_dual_faucet_service::
 Run the following command to replenish the dual faucet:
 
 ```shell
-aptos move run --function-id 'default::fungible_asset_coin_dual_faucet_service::replenish' \
+$APTOS_CLI move run --function-id 'default::fungible_asset_coin_dual_faucet_service::replenish' \
   --type-args \
     '0x1::fungible_asset::Metadata' \
     '0x76ffc077ebde06ee2d20d819429f52a211934d97fc9fb0a98b07d241453ad139::fake_usd::FakeUSD' \
@@ -159,9 +161,9 @@ aptos move run --function-id 'default::fungible_asset_coin_dual_faucet_service::
 Run the following command to mint a meme coin for your testing:
 
 ```shell
-aptos move run --function-id '0x76ffc077ebde06ee2d20d819429f52a211934d97fc9fb0a98b07d241453ad139::launchpad_service::mint_and_drop_burn_ref' \
+$APTOS_CLI move run --function-id '0x76ffc077ebde06ee2d20d819429f52a211934d97fc9fb0a98b07d241453ad139::launchpad_service::mint_and_drop_burn_ref' \
   --type-args \
-    '0x1::fungible_asset::Metadata' \
+    '0x1::aptos_coin::AptosCoin' \
   --args \
     'string:FLEXT' \
     'string:Test FLEX Coin' \
